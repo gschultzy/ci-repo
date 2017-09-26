@@ -3,12 +3,20 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: ubuntu, tag: "14.04"}
+  source: {repository: node, tag: "boron"}
 
 inputs:
 - name: ci-repo
 - name: ci-project
-  path: ci-project
+  path: ci-project/
 
 run:
-  path: ci-repo/concourse/task_run_tests.sh
+  # path: ci-repo/concourse/task_run_tests.sh
+  path: sh
+  args:
+  - -exc
+  - |
+    whoami
+    env
+    chmod +x ci-repo/concourse/task_run_tests.sh
+    ci-repo/concourse/task_run_tests.sh
