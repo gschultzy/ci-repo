@@ -16,6 +16,11 @@ npm --version
 cd ci-project/
 npm install
 
+# Check node and npm versions
+node --version
+nodejs --version
+npm --version
+
 # Install forever tool and start web app in background
 npm install forever -g
 forever start app/server.js
