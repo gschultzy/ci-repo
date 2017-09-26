@@ -3,11 +3,12 @@ resources:
 - name: ci-repo
   type: git
   source:
-    uri: https://github.com/starkandwayne/concourse-tutorial.git
-- name: resource-app
+    uri: https://github.com/gschultzy/ci-repo.git
+
+- name: ci-project
   type: git
   source:
-    uri: https://github.com/cloudfoundry-community/simple-go-web-app.git
+    uri: https://github.com/gschultzy/ci-project.git
 
 - name: resource-deploy-web-app
   type: cf
@@ -24,12 +25,12 @@ jobs:
   public: true
   serial: true
   plan:
-  - get: resource-tutorial
-  - get: resource-app
+  - get: ci-repo
+  - get: ci-project
     trigger: true
   - task: web-app-tests
-    file: resource-tutorial/10_job_inputs/task_run_tests.yml
+    file: ci-repo/concourse/task_run_tests.yml
   - put: resource-deploy-web-app
     params:
-      manifest: resource-app/manifest.yml
-      path: resource-app
+      manifest: ci-project/manifest.yml
+      path: ci-project
