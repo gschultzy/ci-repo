@@ -17,6 +17,8 @@ cf ssh $appname -c "set -e &&
 set -x && 
 export PATH=$PATH:/home/vcap/deps/0/node/bin/ && 
 alias npm='node /home/vcap/deps/0/node/lib/node_modules/npm/bin/npm-cli.js' && 
+node --version && 
+npm --version && 
 cd app/ && 
 npm install --only=dev && 
 npm test"
