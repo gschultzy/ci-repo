@@ -3,7 +3,7 @@ resources:
 - name: ci-repo
   type: git
   source:
-    uri: https://github.com/gschultzy/ci-repo #prod repo
+    uri: https://github.com/gschultzy/test-repo #test repo
 
 - name: ci-project
   type: git
@@ -24,13 +24,23 @@ jobs:
 - name: ci-project-web-app
   public: true
   serial: true
+  
   plan:
+  # Get required resources
   - get: ci-repo
   - get: ci-project
     trigger: true
-  - task: web-app-tests
-    file: ci-repo/concourse/task_run_tests.yml
+  # Deploy app to cf
   - put: resource-deploy-web-app
     params:
       manifest: ci-project/manifest.yml
       path: ci-project
+  # run unit and integration tests
+  - task: web-app-tests
+    file: ci-repo/concourse/task_run_tests.yml
+    params:
+      api: {{cf-api}}
+      username: {{cf-username}}
+      password: {{cf-password}}
+      organization: {{cf-organization}}
+      space: {{cf-space}}

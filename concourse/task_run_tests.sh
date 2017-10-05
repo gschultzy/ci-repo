@@ -1,33 +1,22 @@
 #!/bin/bash
 
 set -e # fail fast
-set -x # print commands
+# set -x # print commands for debugging
 
-# Show resource directories
-ls -al ci-repo/concourse
-ls -al ci-project/
+# Get the cf application name from the manifest file
+appname=$(grep 'name:' ci-project/manifest.yml | awk '{print $3}')
 
-# Check node and npm versions
-node --version
-nodejs --version
-npm --version
+# Connect to cf
+cf login -a $api -u $username -p $password -o $organization -s $space
 
-# Setup app dependencies
-cd ci-project/
-npm install
-
-# Check node and npm versions
-node --version
-nodejs --version
-npm --version
-
-# Install forever tool and start web app in background
-npm install forever -g
-forever start app/server.js
-forever list
-
-# Pause for server to app to start
-sleep 5
-
-# Run unit and intergartion tests
-npm test
+# open SSH connection to app container and run tests
+echo .
+echo "SSH to application $appname ..."
+echo .
+cf ssh $appname -c "set -e && 
+set -x && 
+export PATH=$PATH:/home/vcap/deps/0/node/bin/ && 
+alias npm='node /home/vcap/deps/0/node/lib/node_modules/npm/bin/npm-cli.js' && 
+cd app/ && 
+npm install --only=dev && 
+npm test"

@@ -3,20 +3,20 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: node, tag: "boron"}
+  source:
+    repository: pivotalpa/cf-cli-resource
+    tag: "latest"
 
 inputs:
 - name: ci-repo
 - name: ci-project
-  path: ci-project/
 
 run:
-  # path: ci-repo/concourse/task_run_tests.sh
   path: sh
   args:
   - -exc
   - |
     whoami
-    env
+    uname -a
     chmod +x ci-repo/concourse/task_run_tests.sh
     ci-repo/concourse/task_run_tests.sh
