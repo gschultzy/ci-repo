@@ -3,7 +3,7 @@ resources:
 - name: ci-repo
   type: git
   source:
-    uri: https://github.com/gschultzy/test-repo #test repo
+    uri: https://github.com/gschultzy/ci-repo #prod repo
 
 - name: ci-project
   type: git
